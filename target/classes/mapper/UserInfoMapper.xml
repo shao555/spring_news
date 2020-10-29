@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cs.mapper.UserInfoMapper">
+
+
+    <!--//查询用户表所有记录 select * from userinfo-->
+    <select id="findAllUserInfo" resultType="UserInfo">
+        select * from userinfo
+    </select>
+
+    <resultMap id="user_title_Map" type="UserInfo">
+        <id column="userID" property="userID"></id>
+        <result column="userName" property="userName"></result>
+        <result column="userPass" property="userPass"></result>
+        <result column="sex" property="sex"></result>
+        <result column="age" property="age"></result>
+        <result column="email" property="email"></result>
+        <collection property="topTitleList" ofType="TopTitle">
+            <id column="topID" property="topID"></id>
+            <result column="topTitle" property="topTitle"></result>
+            <result column="sendDate" property="sendDate"></result>
+            <result column="userID" property="userID"></result>
+        </collection>
+    </resultMap>
+
+    <!--//根据ID查询用户所有记录-->
+    <select id="findUserInfoByID" resultMap="user_title_Map">
+        select u.*,t.topTitle from userinfo u,topTitle t where u.userID = #{userID} and u.userID = t.userID
+    </select>
+
+    <resultMap id="userMap" type="UserInfo">
+        <id column="userID" property="userID"></id>
+        <result column="userName" property="userName"></result>
+        <result column="userPass" property="userPass"></result>
+        <result column="sex" property="sex"></result>
+        <result column="age" property="age"></result>
+        <result column="email" property="email"></result>
+        <!--配置集合信息-->
+        <collection property="newsList" ofType="news">
+            <id column="newsID" property="newsID"></id>
+            <result column="newTitle" property="newTitle"></result>
+            <result column="newsContent" property="newsContent"></result>
+            <result column="sendDate" property="sendDate"></result>
+            <result column="userID" property="userID"></result>
+            <result column="topID" property="topID"></result>
+        </collection>
+    </resultMap>
+
+    <!--根据用户名字查询用户发布了那些新闻标题-->
+    <select id="findTitleByuserName" resultMap="userMap">
+        select u.userName,n.newTitle from
+        news n,userinfo u
+        where u.userName like concat ('%',#{userName},'%')
+        and u.userID = n.userID
+    </select>
+
+    <!--添加用户-->
+    <insert id="addUser" parameterType="userinfo">
+        insert into userinfo
+        (userName,userPass,sex,age,email)
+        value (#{userName},#{userPass},#{sex},#{age},#{email})
+    </insert>
+
+
+</mapper>

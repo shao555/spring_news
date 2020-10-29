@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+    <!--使用C3P0配置数据源-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" scope="singleton">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+        <property name="jdbcUrl"
+                  value="jdbc:mysql://127.0.0.1:3306/newsmanager?useUnicode=true&amp;characterEncoding=utf-8"></property>
+        <property name="user" value="root"></property>
+        <property name="password" value="114514"></property>
+    </bean>
+
+    <!--使用数据源创建sqlSession工厂-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+    </bean>
+
+    <!--创建接口-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.cs.mapper"></property>
+    </bean>
+
+    <!--扫描service包下的所有注解-->
+    <context:component-scan base-package="com.cs.service"/>
+
+    <tx:annotation-driven/>
+
+<!--    &lt;!&ndash;配置事务&ndash;&gt;-->
+<!--    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+<!--        <property name="dataSource" ref="dataSource"/>-->
+<!--    </bean>-->
+
+<!--    &lt;!&ndash;声明式事务&ndash;&gt;-->
+<!--    &lt;!&ndash;配置通知&ndash;&gt;-->
+<!--    <tx:advice id="advice" transaction-manager="transactionManager">-->
+<!--        <tx:attributes>-->
+<!--            <tx:method name="find*" isolation="DEFAULT" propagation="SUPPORTS"/>-->
+<!--            <tx:method name="add*" isolation="DEFAULT" propagation="REQUIRED"/>-->
+<!--            <tx:method name="del*" isolation="DEFAULT" propagation="REQUIRED"/>-->
+<!--            <tx:method name="save*" isolation="DEFAULT" propagation="REQUIRED"/>-->
+<!--            <tx:method name="update*" isolation="DEFAULT" propagation="REQUIRED"/>-->
+<!--        </tx:attributes>-->
+<!--    </tx:advice>-->
+
+<!--    &lt;!&ndash;配置切面&ndash;&gt;-->
+<!--    <aop:config>-->
+<!--        <aop:pointcut id="pointcut" expression="execution(* com.cs.service..*.*(..))"></aop:pointcut>-->
+<!--        <aop:advisor advice-ref="advice" pointcut-ref="pointcut"></aop:advisor>-->
+<!--    </aop:config>&ndash;&gt;-->
+
+</beans>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--数据源-->
+    <!--配置别名-->
+    <typeAliases>
+        <package name="com.cs.entity"/>
+    </typeAliases>
+    <!--引入映射文件-->
+    <mappers>
+        <mapper resource="mapper/NewsMapper.xml"></mapper>
+        <mapper resource="mapper/UserInfoMapper.xml"></mapper>
+        <mapper resource="mapper/TopTitleMapper.xml"></mapper>
+    </mappers>
+
+</configuration>
+
